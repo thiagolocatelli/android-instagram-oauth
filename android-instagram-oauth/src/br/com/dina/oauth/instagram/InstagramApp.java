@@ -151,7 +151,6 @@ public class InstagramApp {
 					HttpURLConnection urlConnection = (HttpURLConnection) url.openConnection();
 					urlConnection.setRequestMethod("GET");
 					urlConnection.setDoInput(true);
-					urlConnection.setDoOutput(true);
 					urlConnection.connect();
 					String response = streamToString(urlConnection.getInputStream());
 					System.out.println(response);

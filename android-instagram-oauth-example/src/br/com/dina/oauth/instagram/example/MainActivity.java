@@ -3,20 +3,31 @@ package br.com.dina.oauth.instagram.example;
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.DialogInterface;
+import android.content.Intent;
+import android.os.Build;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.view.View.OnClickListener;
+import android.webkit.CookieManager;
 import android.widget.Button;
 import android.widget.TextView;
 import android.widget.Toast;
-import br.com.dina.oauth.instagram.InstagramApp;
-import br.com.dina.oauth.instagram.InstagramApp.OAuthAuthenticationListener;
+
 
 public class MainActivity extends Activity {
 
 	private InstagramApp mApp;
 	private Button btnConnect;
 	private TextView tvSummary;
+
+	@Override
+	public void onBackPressed() {
+		Intent intent = new Intent(Intent.ACTION_MAIN);
+		intent.addCategory(Intent.CATEGORY_HOME);
+		intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+		startActivity(intent);
+	}
 
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
@@ -43,9 +54,12 @@ public class MainActivity extends Activity {
 									new DialogInterface.OnClickListener() {
 										public void onClick(
 												DialogInterface dialog, int id) {
+
 											mApp.resetAccessToken();
 											btnConnect.setText("Connect");
 											tvSummary.setText("Not connected");
+											Intent intent = new Intent(MainActivity.this,MainActivity.class);
+											startActivity(intent);
 										}
 									})
 							.setNegativeButton("No",
@@ -58,6 +72,7 @@ public class MainActivity extends Activity {
 					final AlertDialog alert = builder.create();
 					alert.show();
 				} else {
+
 					mApp.authorize();
 				}
 			}
@@ -70,7 +85,7 @@ public class MainActivity extends Activity {
 
 	}
 
-	OAuthAuthenticationListener listener = new OAuthAuthenticationListener() {
+	InstagramApp.OAuthAuthenticationListener listener = new InstagramApp.OAuthAuthenticationListener() {
 
 		@Override
 		public void onSuccess() {
